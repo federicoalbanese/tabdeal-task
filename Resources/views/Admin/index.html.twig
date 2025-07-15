@@ -1,0 +1,42 @@
+{% extends '@MauticCore/Default/content.html.twig' %}
+
+{% block mautic_content %}tabdealTask{% endblock %}
+
+{% block headerTitle %}
+    {{ 'tabdealtask.form.title'|trans }}
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+            {{ form_start(form) }}
+
+            <div class="form-group form-check">
+                {{ form_widget(form.isChecked, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_label(form.isChecked, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                {{ form_errors(form.isChecked) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.fieldOne) }}
+                {{ form_widget(form.fieldOne, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.fieldOne) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.fieldTwo) }}
+                {{ form_widget(form.fieldTwo, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.fieldTwo) }}
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-success">
+                    <i class="fa fa-save"></i> {{ 'mautic.core.form.save'|trans }}
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

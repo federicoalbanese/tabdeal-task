@@ -1,0 +1,49 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: .docker/php/Dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    container_name: mautic_php
+    environment:
+      MAUTIC_DB_HOST: db
+      MAUTIC_DB_USER: mautic
+      MAUTIC_DB_PASSWORD: mauticpass
+      MAUTIC_dbBASE: mautic
+    volumes:
+      - ./:/var/www/html
+      - ./docker/php/conf.d/php-local.ini:/usr/local/etc/php/php.ini
+      - ./docker/php/conf.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:1.26.2-alpine
+    restart: 'always'
+    tty: true
+    container_name: mautic_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d/
+    depends_on:
+      - app
+
+  db:
+    image: mysql:8.0
+    container_name: mautic_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: mautic
+      MYSQL_USER: mautic
+      MYSQL_PASSWORD: mauticpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  db:
